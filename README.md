@@ -8,7 +8,8 @@
 
 1. [SYSTEM/README.md](SYSTEM/README.md) — 跨项目的记忆规则与自动维护协议。
 2. [SYSTEM/MEMORY_POLICY.md](SYSTEM/MEMORY_POLICY.md) — 分类、隐私、去重、验证、主动更新规范。
-3. [PROJECTS/README.md](PROJECTS/README.md) — 各科研/工作项目的独立记忆。\n4. [TOPICS/README.md](TOPICS/README.md) — 不依附具体项目的非私人专题知识。
+3. [PROJECTS/README.md](PROJECTS/README.md) — 各科研/工作项目的独立记忆。
+4. [TOPICS/README.md](TOPICS/README.md) — 不依附具体项目的非私人专题知识。
 5. [PROJECTS/HERO/README.md](PROJECTS/HERO/README.md) — 当前 HerO × TextGrad 研究索引。
 6. 根据正在做的任务选择 `PROJECTS/HERO/` 下的对应专题。
 
