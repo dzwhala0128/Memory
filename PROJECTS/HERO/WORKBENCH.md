@@ -52,3 +52,7 @@
 - **输出术语不一致：** 工作台存在 `optimized_candidate` / `format_normalized_candidate` / `baseline_structural_fallback` 等旧状态；Final记忆中的 `optimized` / `no_change` / `baseline_fallback` 必须以实际代码的枚举及语义为准。
 
 **下一步：** 先只读核验服务器Final的 `run.sh`、`pipeline/unified.py`、模型/Prompt/Few-shot配置、AF/QA schema、每阶段状态、run-id与冻结产物；形成接口与字段映射表。之后把现有工作台作为前端/展示层，优先通过单一Final后端适配器调用实际业务逻辑，而不是保留旧工作台独立实现的另一套TextGrad流程。未完成Final源代码对比前，不声明已对齐或已可运行。
+
+## 6. 前后端映射基线（2026-11-06）
+
+已整理 [WORKBENCH_INTERFACE_MAP.md](WORKBENCH_INTERFACE_MAP.md)：逐项对照 UI 01–09、现有工作台 HTTP 接口、Final 参照入口、运行状态及关键缺口。实际检查了上传工作台 v1.6.2 的代码，52 项单元测试通过；Final 源码仅以 Hero-TTO GitHub 同结构代码作参考，**未登录 Server01 核查现行 Final**。下一阶段在修改需求前按此映射讨论，服务端实际源码仍拥有最终优先级。
