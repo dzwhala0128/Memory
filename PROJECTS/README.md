@@ -4,7 +4,7 @@
 
 | 项目ID | 名称 | 当前状态 | 入口 |
 |---|---|---|---|
-| `HERO` | HerO × TextGrad · AVeriTeC | 活跃；`Final`为现行开发项目 | [HERO/README.md](HERO/README.md) |
+| `HERO` | HerO × TextGrad · AVeriTeC | 活跃；`clean-main` 为当前科研实验主线，Final 独立保留 | [HERO/README.md](HERO/README.md) |
 
 ## 新增项目的约定
 
