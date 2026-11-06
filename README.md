@@ -8,9 +8,9 @@
 
 1. [SYSTEM/README.md](SYSTEM/README.md) — 跨项目的记忆规则与自动维护协议。
 2. [SYSTEM/MEMORY_POLICY.md](SYSTEM/MEMORY_POLICY.md) — 分类、隐私、去重、验证、主动更新规范。
-3. [PROJECTS/README.md](PROJECTS/README.md) — 项目分类目录与未来新领域的接入方式。
-4. [PROJECTS/HERO/README.md](PROJECTS/HERO/README.md) — 当前 HerO × TextGrad 研究索引。
-5. 根据正在做的任务选择 `PROJECTS/HERO/` 下的对应专题。
+3. [PROJECTS/README.md](PROJECTS/README.md) — 各科研/工作项目的独立记忆。\n4. [TOPICS/README.md](TOPICS/README.md) — 不依附具体项目的非私人专题知识。
+5. [PROJECTS/HERO/README.md](PROJECTS/HERO/README.md) — 当前 HerO × TextGrad 研究索引。
+6. 根据正在做的任务选择 `PROJECTS/HERO/` 下的对应专题。
 
 ## 当前有效项目
 
@@ -30,4 +30,4 @@
 - **跨会话自动同步的前提**：新会话必须得知并读取本仓库的协议；GitHub 文档本身不会自动注入每个新会话。可将上述快捷指令放入 ChatGPT 的自定义指令以减少手动提醒。
 - 不要把过去项目的运行结果自动算作 `Final` 的真实实验结果。
 - 不保存私人经历、身份识别信息、服务器口令、API Key、SSH密钥或内部日志。
-- 未来添加其他科研/工作领域时，在 `PROJECTS/` 下另建独立目录，而不是把内容塞进 HerO 专题。
+- 未来添加其他科研/工作项目时在 `PROJECTS/` 下另建目录；不依附项目的非私人主题放在 `TOPICS/`，不要混进 HerO 专题。
