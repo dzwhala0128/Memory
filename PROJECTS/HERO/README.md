@@ -1,26 +1,28 @@
 # HERO｜HerO × TextGrad 研究记忆
 
-> 更新时间：2026-11-06 · **唯一现行代码工作项目：`Final`**  
-> 本目录仅记研究主线和当前开发情况。代码、模型配置和脚本参数以 `Final` 真实文件为准；旧实验不得无依据归属于 `Final`。
+> 更新时间：2026-11-07 · **当前科研实验主线：`hero-textgrad-research / clean-main`**  
+> 本目录记录 HerO × TextGrad 科研工作线。**用户2026-11-07明确指出以 `clean-main` 为主线做实验**；代码、Prompt 和模型设置默认参考该分支当前文件，不再把 `Final` 视作唯一现行开发项目。过去实验须保留来源，不可混写。
 
 ## 阅读导航
 
 | 文件 | 内容 |
 |---|---|
-| [FINAL.md](FINAL.md) | 当前项目 `Final`：目录、运行流程、已验证的工程现状与尚未解决的检查问题 |
+| [CLEAN_MAIN.md](CLEAN_MAIN.md) | **当前主线**：clean-main 仓库与分支、研究边界及默认后续动作 |
+| [FINAL.md](FINAL.md) | **独立/较早工作线**：Final 的历史流程、记录与待验证事项 |
 | [RESEARCH.md](RESEARCH.md) | AVeriTeC、HerO、Native TextGrad、四分类规则、Gold隔离及研究动机 |
 | [EXPERIMENTS.md](EXPERIMENTS.md) | 历史研究实验与Final测试待验证清单，明确区分版本 |
-| [WORKBENCH.md](WORKBENCH.md) | 下一阶段：将网页工作台按Final项目逻辑对齐 |
+| [WORKBENCH_CLEAN_MAIN_V1.md](WORKBENCH_CLEAN_MAIN_V1.md) | **当前新工作台**：clean-main V1.0 全量 ZIP、冻结设计、部署待验收 |
+| [WORKBENCH.md](WORKBENCH.md) | 旧工作台与 Final 对齐的历史计划（非当前工作台） |
 
 ## 当前已确定的工程方向
 
-- 用户将个人后续实验全部以 `Final` 项目为中心展开。
-- 不要把其他代码副本、历史运行记录或旧文件名当作当前开发入口。
-- `Final` 采用预先冻结的初始VP；TextGrad阶段调用Qwen3.5-9B（原服务端口8005）；Evaluator—Backward—Optimizer—结构验证—冻结—离线评价。
-- 用户计划将网页工作台的控件、模型调用、状态展示和数据流**逐项对应**到当前Final实际实现；目前这是下一阶段任务，**尚未报告完成**。
+- **当前实验/代码主线：** [hero-textgrad-research 的 clean-main 分支](https://github.com/dzwhala0128/hero-textgrad-research/tree/clean-main)。默认以其真实代码和运行协议为准，优先核实当前提交。
+- **新 Web 工作台：** 独立存放于服务器空目录 `project/Hero-view/`，以 clean-main 为源码基准；V1.0 全量 ZIP 已交付，服务器部署与真实 GPU/vLLM 尚待验收。
+- **Final：** 独立或较早的工作线，已有科研与预检资料保留在 Final 专题；不能将 Final 的 Qwen3.5-9B、固定 2-shot 或其他配置自动归为 clean-main 的最新设置。
+- **共同科研边界：** 初始 VP 冻结、Gold 与运行时隔离、Native Backward/TGD 语义严格区分、结构验证不替模型判标签。
 
 ## 外部代码来源边界
 
-- 既往研究参考代码：[hero-textgrad-research · clean-main](https://github.com/dzwhala0128/hero-textgrad-research/tree/clean-main)。
+- **当前主线代码：** [hero-textgrad-research · clean-main](https://github.com/dzwhala0128/hero-textgrad-research/tree/clean-main)。
 - 可能存在另一份公开仓库 [Hero-TTO](https://github.com/dzwhala0128/Hero-TTO) 供资料参考；**不能推断其内容就是服务器Final的最新版**。
-- `Final` 的最新服务端改动若没有同步GitHub，必须以用户实际运行输出/现行文件为准；可用工具能直接访问时应主动核查，否则如实标记不可验证。
+- `Final` 的服务端改动如未同步 GitHub，仅在明确讨论该工作线时依用户提供的运行输出或可用工具核验；不得替代 clean-main。
