@@ -2,7 +2,7 @@
 
 > 更新：2026-11-07（亚洲时区）｜发行包日期：2026-11-06  
 > **状态：独立完整源码 ZIP 已在 ChatGPT 会话中交付；尚未获得 Server01 部署或真实 GPU/vLLM 端到端验收反馈。**  
-> 本文件记录**本次用户明确指定的新工作台工作线**，不要将它与 [FINAL.md](FINAL.md) 的服务器 `Final` 科研主工作区，或 [WORKBENCH.md](WORKBENCH.md) 的“旧工作台与 Final 对齐”计划混同。
+> 本文件记录**当前科研实验主线 clean-main 所配套的新工作台工作线**。用户2026-11-07再次明确：**当前研究实验也仍以 clean-main 为主线**，而 [FINAL.md](FINAL.md) 属于独立/较早工作线；勿与 [WORKBENCH.md](WORKBENCH.md) 的旧工作台→Final 对齐计划混同。
 
 ## 1. 最新用户明确指令与工程边界
 
@@ -76,5 +76,5 @@
 
 - 新版需求冻结文件：会话生成 `HerO_Visual_Workbench_Design_Frozen_v1_20261106.md`（用户会话工件，不在 GitHub 记忆库中备份）。
 - 新版 ZIP：`HerO-Visual-Workbench-v1.0-full.zip`（用户会话交付工件，SHA 见上；不是 GitHub Memory 中的源码）。
-- 本项目当前科研主线：[FINAL.md](FINAL.md)（`Final` 研究工程）。
+- **当前科研主线：** [CLEAN_MAIN.md](CLEAN_MAIN.md)（`clean-main` 研究工程）；[FINAL.md](FINAL.md) 是独立/较早的工作线记录。
 - 旧工作台向 Final 对齐的历史计划：[WORKBENCH.md](WORKBENCH.md)、[WORKBENCH_INTERFACE_MAP.md](WORKBENCH_INTERFACE_MAP.md)。
