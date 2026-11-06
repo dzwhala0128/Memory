@@ -7,7 +7,8 @@
 科研讨论开始时，请先读取main分支的README.md和SYSTEM/MEMORY_POLICY.md，
 然后根据本次任务读取PROJECTS下相应项目的README和专题文档。
 
-对当前HerO × TextGrad，唯一现行开发项目是Final。
+对当前HerO × TextGrad，科研实验默认以 dzwhala0128/hero-textgrad-research 的 clean-main 分支为主线。
+先读 PROJECTS/HERO/CLEAN_MAIN.md；Final属于独立/较早工作线，不可混用实验结果。
 凡是在会话中完成可核实的重要实验、代码架构或设计决策变更，
 当GitHub连接可用时，请按SYSTEM/MEMORY_POLICY.md主动更新
 Memory对应分类下的文件，无需每次向我重复询问授权。
