@@ -78,3 +78,17 @@
 - 新版 ZIP：`HerO-Visual-Workbench-v1.0-full.zip`（用户会话交付工件，SHA 见上；不是 GitHub Memory 中的源码）。
 - **当前科研主线：** [CLEAN_MAIN.md](CLEAN_MAIN.md)（`clean-main` 研究工程）；[FINAL.md](FINAL.md) 是独立/较早的工作线记录。
 - 旧工作台向 Final 对齐的历史计划：[WORKBENCH.md](WORKBENCH.md)、[WORKBENCH_INTERFACE_MAP.md](WORKBENCH_INTERFACE_MAP.md)。
+
+## 7. 2026-11-07 V1.0.1 工作台前端修复（完整替换包，服务器待升级）
+
+**用户反馈：** V1.0 运行监控的详情按钮没有可见的独立详情界面，查看长输入/输出时滚动位置在数秒内自动回到顶部。
+
+**根因（读取 V1.0 实际源码）**：点击详情只把 JSON 追加到任务表格下方，没有弹窗；全局 2.2 秒循环自动调用 reloadJobs()，进而执行 render() 全量重建页面，导致滚动位置被重置，包括已完成的任务。
+
+**V1.0.1 修复：** 详情改为独立可滚动弹窗，支持优化结果、输入快照、原始响应、真实请求、执行追踪、完整 JSON 六个标签，可复制内容或下载单元 JSON。当前 Job 仅在 queued/running 阶段自动轮询，必要页面重绘时保存主监控滚动位置。
+
+**验证：** JavaScript 语法检查通过，原有 12 项后端 pytest 全部通过。以用户上传的真实 Claim59 Job JSON 作离线 Chromium UI 夹具（没有发送模型请求），验证详情打开、标签切换、长 JSON 滚动到 700px、等待 4.8 秒不回顶、关闭弹窗和无 JS 异常。ZIP 内容完整性检查通过。
+
+**发行工件：** HerO-Visual-Workbench-v1.0.1-full.zip，SHA256 `f1c0bb08f4e2a2e9da12092d6457496915daac53a0cdac22fe993bfaf36c031b`。本仓库不保存 ZIP 本体。
+
+**边界：** 本轮仅修改工作台 UI 及版本展示，不改 Gold 隔离、模型推理或原生 TGD、现有 SQLite 结构。用户服务器已存在 V1.0 的实际执行记录，但尚未收到 v1.0.1 已上传并重启的确认。升级前建议备份 .env 与 data/workbench.sqlite3；不需要重新运行 Claim 59。
