@@ -39,3 +39,24 @@
 1. 用户讨论 HerO 实验/代码/新工作台时，先读取本文件、[RESEARCH.md](RESEARCH.md) 和相关专题。
 2. 需要代码判断时，优先访问 [clean-main](https://github.com/dzwhala0128/hero-textgrad-research/tree/clean-main) 当前源码，记录参考提交和路径；不要把历史 `Final` 说明冒充最新事实。
 3. 如出现重要已确认的代码/实验/架构变化，在可访问 GitHub 且符合 [Memory Policy](../../SYSTEM/MEMORY_POLICY.md) 的前提下主动更新本仓库，并保留用户报告/静态审查/实际执行的证据等级。
+
+## 6. AVeriTeC 四分类官方边界核对
+
+> 2026-11-08 来源核对；属于**通用标签语义/离线方法诊断**，不是根据已见 Gold 结果制定的运行时 claim 特例规则。
+
+来源优先级：AVeriTeC 原论文 **J.3.2–J.3.5、J.4.1、J.5.1–J.5.3**（https://openreview.net/pdf/78fa849d975d76d00ba21f34b0759c54c6d3e427.pdf），然后才是 clean-main 的 `docs/averitec_aligned_v2/AVeriTeC_four_way_labeling_rules.md`，项目约束和各版本 Prompt。
+
+核心结论：
+- 四分类是**完整 Claim 层面**判定，不能把 QA evidence 或 AF stance 直接映射到最终四分类。
+- 官方明确：普通合取的 `Supported + NEE => NEE`；`Refuted + NEE => Refuted`；但条件/因果/比较/引语不能机械套用。
+- `NEE` 是证据不足，不等于模型主观不确定；无支持证据不自动构成 Refuted。**例外**：在已经证明预期官方记录应当存在且记录检索充分的情况下，系统性缺失也能使 Claim 极不可能成立，支持 Refuted；官方 J.3.5 的肯尼亚宵禁、印度非英语公告、Shakira 国籍、名人引语和 RBI 公告示例。
+- CE/C 不限于同命题证据互相矛盾，还包括**cherry-picking / technically true but misleading / omitted critical context**；但普通上下文差异、时间/实体/统计口径不一致，不自动等于 CE/C。`always/never` 等明确全称声明有反例时通常 Refuted，而没有时间限定的状态变化可能 CE/C。原论文指出 baseline 的“有支持+有反驳=>CE/C”造成严重 false positives。
+- 因果命题核查**因果联系**；Quote verification 核查原话是否说过，但不能把被核查的具体内容偷换成“某人说过”；J.3.3、J.4.2 给出何时去掉 `said`、何时保留的例子。
+- 数值必须对齐实体/变量、时间、单位、分母、近似和条件；J.5.3 强调计算、比较、四舍五入必须在 justification 中说明；未规定通用容差阈值。
+- AVeriTeC 标注流程区别：Phase1 尽量映射原核查机构判断；Phase2/Phase3 根据**QA+metadata**独立判定且不应靠 fact-checking article 或不普遍的常识补足证据。原始 Gold 不保证对我们的固定10QA一律有充分证据；在现有10QA下 NEE 与参考 Gold 不符不一定意味着语义推理错误。
+- 实验防泄漏：标签定义可作为通用 task semantics，但看过 Gold 后为某些 claim 优化梯度不得当作新 blind/no-gold 泛化验证。
+
+**已核实的潜在 Prompt/协议差异（并非确认 bug，需受控测试）**：
+- `textgrad_source_native_hero/hero_extension/hero_objective_evaluator_v4a.py` 的 CE/C 主要写同命题同范围 support/refute 或选择性忽略一侧证据，可能没有充分覆盖官方更宽泛的 true-but-misleading/cherry-picking；`hero_extension/hero_objective.py` 中多个定义也有相似收窄倾向。
+- 独立 `Hero-view` v1.0.1 运行 Native Optimizer 时从 `hero_extension.hero_objective.HERO_CONSTRAINTS` 取默认约束；该约束只包括 JSON 结构、四个合法标签和无额外事实，**不会把 J.3.4/J.3.5 所有特殊标签规则自动注入 TGD**。输入梯度和 Context 才是该次标签语义变化的主要引导。若今后调整，要先明确实验协议、作独立消融并避免结果驱动标签调参。
+- 本次仅核查资料和代码，**未修改 clean-main 或工作台执行逻辑**；此前用户 10-Claim batch 实验结果仍按 [EXPERIMENTS.md](EXPERIMENTS.md) 记录。
