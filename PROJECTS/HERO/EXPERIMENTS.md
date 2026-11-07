@@ -77,3 +77,16 @@ Gold离线评价（如有）：
 - **截图所示真实任务**：`optimizer · native · 并发 1`，执行完成 1/1；运行结果 `Not Enough Evidence`，输出 JSON 显示 `execution_type: native_tgd_manual_gradient`、`expected_hit: true`、`mock: false`、`initial_verdict: Supported`、`pred_label: Not Enough Evidence`，`elapsed_seconds: 5.061`。截取的 raw_output 开头解释原始证据只描述嫌疑人用假卡 ATM 取现、短信欺诈，不足以证明向 Santander 客户寄送假卡。
 - **初步观察**：单样本达到目标标签，部分可见 justification 与梯度诊断的角色/事件区分一致。**不是** Native Backward 自动生成梯度，也不能据此说明独立的 Gold 准确率指标有提升，或证明完整 justification/结构校验均通过。
 - **下一步核对**：从工作台任务详情或 JSON 导出获取完整 `raw_output`、`pred_label`、`parsed_solution`、`validation`、真实请求与运行参数；保持相同 Current Solution / QA / Context / 模型和解码参数，开展未干预对照及其他 Claim 重复验证。当前未收到上述完整文件，均标为待验证。
+
+## F. 10 条 Targeted40 初始 VP 误判的人工梯度批量试验计划（2026-11-07）
+
+**状态：实验资料与独立批量提交脚本已制作、离线模拟测试通过；Server01 的真实 10 条模型推理尚未执行/尚无真实输出。**
+
+- 研究代码默认 `dzwhala0128/hero-textgrad-research@clean-main`；输入取 `experiments/s1_qa_span_targeted40_v1/prepared/inputs.json` 的原始冻结 Baseline Solution 与每条 10 QA。
+- 在 Targeted40 的历史离线 `offline/selection.json` 中找出 baseline verdict 与离线参考不一致者，选择 10 条：**9、59、153、175、205、206、208、233、427、483**。需注意存在用户/模型判定口径及 gold 歧义，病例选择是依据历史错误集合、不是随机独立泛化集。
+- 逐 Claim 人工构造 10 个独立 Textual Gradient（不同 Claim 不共享原始具体文本），依据各自 QA 的数量/时间/主体/因果/引语/程序范围问题进行反馈；**梯度不直接写目标标签**。Claim59 在先前单例运行已验证；新批量里仍可复测。
+- 已生成会话工件 `Claim10_Optimizer_Batch_v1.zip`（完整脚本、10 梯度及中文理由，约 25KB，SHA256 `fb75600b78a48edba2580328f4fd39335544c897253a800a334d847ecd4841ec`）。该 ZIP 不存于 Memory 仓库，须由用户下载并上传 Server01 的 `Hero-view`。
+- 脚本不修改 `clean-main` 代码或工作台源码：从服务器已有 Targeted40 读取 10QA，调用 v1.0.1 `/api/claims` / `/api/versions` / `/api/jobs`，提交 `stage=optimizer, mode=native, concurrency=1`，默认使用当前 `.env` 模型（此前用户实测 Qwen3.5-9B）、temperature=0、enable_thinking=false、max_tokens=1536、seed=12345。
+- 运行时文件只包含 Claim、10 QA、冻结 Current Solution、人工梯度及 Context；无 Gold。`expected_verdict` 如工作台数据库已预设属于分析字段，Native TGD 请求不注入它。运行完成导出每条原始/新预测、结构验证状态、完整模型请求与响应；**另一个独立离线脚本**在任务结束后才读取 `selection.json` 核算目标命中，结果不能被解释为随机泛化准确率。
+- 离线测试：使用 10 条合成数据、FastAPI TestClient 与不触发模型的 job enqueue，检查 10 个版本和 10 个快照、QA Context ×10、无运行时 Gold、模型参数、重复提交保护；`pytest` 1/1 通过，Python 语法与 ZIP 完整性检查通过。**这不代表 Server01 真实模型已成功执行。**
+- 待用户在 Server01 执行 `python claim10-batch/batch10_optimizer.py submit`，回传 Job JSON/CSV，再做冻结后实验比较与纠错画像。
