@@ -64,3 +64,16 @@ Gold离线评价（如有）：
 1. 用户默认以 `hero-textgrad-research/clean-main` 开展 HerO × TextGrad 实验；实验结论、运行路径及指标必须按该分支实际协议核对，不能沿用 Final 快照。
 2. clean-main 新图形化工作台 V1.0 现处全量 ZIP 已交付、Server01 部署及模型端到端验收待完成阶段，见 [WORKBENCH_CLEAN_MAIN_V1.md](WORKBENCH_CLEAN_MAIN_V1.md)。
 3. 旧工作台对齐 Final 的历史未完成事项保留在 [WORKBENCH.md](WORKBENCH.md)，除非用户明确切换到 Final，否则不作为当前优先任务。
+
+## E. clean-main / HerO-view 第一条人工梯度修正测试（用户截图，2026-11-07）
+
+**证据级别：用户提供的 Server01 工作台“运行监控中心”截图；未取得完整 JSON 导出、服务端请求日志、原始响应全文或可重复运行统计。** 不把此单条测试当作全量准确率提升或完整 Native Backward 复现。
+
+- **科研主线**：`hero-textgrad-research@clean-main`，其独立工作台 HerO Visual Workbench v1.0（`Hero-view`，用户已成功打开网页，已导入本条样本）。
+- **样本**：Claim #59，内容为 Santander 客户是否被寄送假银行卡的诈骗；原始 10 QA。来源文件 `experiments/s1_qa_span_targeted40_v1/prepared/inputs.json` 和此前的无金标签运行输入。
+- **Frozen Initial VP**：`Supported`；原始 justification 为 `The answers and sources show that there is a scam so the claim is supported.`。
+- **参考信息来源**：历史离线筛选文件 `experiments/s1_qa_span_targeted40_v1/offline/selection.json` 曾将该例记录为误判、参考标签 `Not Enough Evidence`。工作台的 `Expected Verdict` 是**仅分析使用的目标标签**，不应传入模型实际生成请求。
+- **干预方式**：人工撰写英语 Textual Gradient，指出“骗子使用伪造银行卡在 ATM 取款”与“客户收到伪造银行卡”不是同一事件；另区分发送虚假短信。用户将 Claim/10 QA 输入工作台，将人工梯度及 Claim/QA Context 输入独立 Optimizer。
+- **截图所示真实任务**：`optimizer · native · 并发 1`，执行完成 1/1；运行结果 `Not Enough Evidence`，输出 JSON 显示 `execution_type: native_tgd_manual_gradient`、`expected_hit: true`、`mock: false`、`initial_verdict: Supported`、`pred_label: Not Enough Evidence`，`elapsed_seconds: 5.061`。截取的 raw_output 开头解释原始证据只描述嫌疑人用假卡 ATM 取现、短信欺诈，不足以证明向 Santander 客户寄送假卡。
+- **初步观察**：单样本达到目标标签，部分可见 justification 与梯度诊断的角色/事件区分一致。**不是** Native Backward 自动生成梯度，也不能据此说明独立的 Gold 准确率指标有提升，或证明完整 justification/结构校验均通过。
+- **下一步核对**：从工作台任务详情或 JSON 导出获取完整 `raw_output`、`pred_label`、`parsed_solution`、`validation`、真实请求与运行参数；保持相同 Current Solution / QA / Context / 模型和解码参数，开展未干预对照及其他 Claim 重复验证。当前未收到上述完整文件，均标为待验证。
