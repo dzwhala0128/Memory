@@ -90,3 +90,31 @@ Gold离线评价（如有）：
 - 运行时文件只包含 Claim、10 QA、冻结 Current Solution、人工梯度及 Context；无 Gold。`expected_verdict` 如工作台数据库已预设属于分析字段，Native TGD 请求不注入它。运行完成导出每条原始/新预测、结构验证状态、完整模型请求与响应；**另一个独立离线脚本**在任务结束后才读取 `selection.json` 核算目标命中，结果不能被解释为随机泛化准确率。
 - 离线测试：使用 10 条合成数据、FastAPI TestClient 与不触发模型的 job enqueue，检查 10 个版本和 10 个快照、QA Context ×10、无运行时 Gold、模型参数、重复提交保护；`pytest` 1/1 通过，Python 语法与 ZIP 完整性检查通过。**这不代表 Server01 真实模型已成功执行。**
 - 待用户在 Server01 执行 `python claim10-batch/batch10_optimizer.py submit`，回传 Job JSON/CSV，再做冻结后实验比较与纠错画像。
+
+## G. 10-Claim 批量 Native Optimizer 人工梯度真实输出审计（2026-11-07）
+
+**证据来源与范围：** 用户在 ChatGPT 上传 Server01 Hero-view 导出的 `job_a482b543dd1847.json`（完整 10 units），仓库 `hero-textgrad-research@clean-main` 的 `experiments/s1_qa_span_targeted40_v1/offline/selection.json` 提供离线参考标签。该实验属**人工编写梯度输入 Native `TextualGradientDescent.step()`**，不是 Evaluator→Native Backward 自动链路。
+
+- Job：`job_a482b543dd1847`，2026-11-07 15:33:40–15:34:10 UTC，`stage=optimizer`、`execution_mode=native`、`concurrency=1`、`status=completed`，10/10 units 完成、10/10 结构 Validator `valid=true`、10/10 `mock=false`，用户实际模型 `qwen3.5-9B`，temperature=0、seed=12345、enable_thinking=false、max_tokens=1536、服务 `http://127.0.0.1:8005/v1`。
+- 十个 Claim 全部为初始标签与离线参考不符：初始参考命中 0/10。优化后变更 6/10，仍不变 4/10；**离线参考命中 2/10（Claim59、233）**，即选定误判集的条件性修正率 20%，**不是随机样本准确率/全部 AVeriTeC 提升**。所有 Gradients 各不相同，每个 Context 都含完整 10 QA。核查请求中的 Gold 未被注入；选样使用历史参考标签，且人工梯度由研究者预先撰写，不能称为 Blind 或自动 Gradient 的方法性能。
+
+| Claim | 初始 VP | Optimizer 输出 | 离线参考 | 是否修正到参考 |
+|---|---|---|---|---|
+| 9 | Supported | CE/C | NEE | 否 |
+| 59 | Supported | NEE | NEE | **是** |
+| 153 | Refuted | CE/C | NEE | 否 |
+| 175 | Refuted | NEE | Supported | 否 |
+| 205 | Refuted | Refuted | Supported | 否 |
+| 206 | Refuted | CE/C | NEE | 否 |
+| 208 | Supported | Supported | NEE | 否 |
+| 233 | Refuted | NEE | NEE | **是** |
+| 427 | Refuted | Refuted | CE/C | 否 |
+| 483 | Refuted | Refuted | NEE | 否 |
+
+**语义诊断（初步，不能替代独立标注）**：
+- 59 区分嫌疑人用假卡取款与给客户寄假卡；233 区分财务指标不同口径并指出声明缺时间地域条件。两例 Justification 与 NEE 参考一致。
+- 9、153、206 虽识别局部不一致，但直接升级成 CE/C；206 将不同比例/时间窗当冲突。
+- 205 用 63m ×13%=8.19m 直接反驳 `approximately 7m`，需要审查误差容忍范围；208 将有人表达“没有道理”视作对规范性陈述的支持；427 将原文 in-person ballot 限缩成标准选票、错误排除 provisional；483 对 `Trump said ...` 的归因与引语事实核查范围混淆。
+- 175 改 NEE 虽未命中历史 Gold Supported，但已有 QA 主要覆盖 2018–2019，缺 2020 的六个月窗口；存在**证据覆盖不足**，不能直接认定该标签更没有证据依据。
+- **实验工具注意：** Batch 任务 9/10 的 `expected_verdict` 为空，仅 Claim59 为 NEE，因此日志的 `expected_hit=false` 不能直接读作事实核查错误。须独立在冻结后对接 offline/selection 计算参考命中。建议修复 UI 的 Expected 指标语义（未设置要显示“未评估”，而非 false）。
+- **下一步研究**：先冻结并保存此 batch；优先对 9/153/206 的 CE/C 误判以及 205/427 的语义规则重做梯度对照，控制其他参数/上下文不变；与无梯度同模型重判、Native Backward 自动梯度及独立人工复核相比较。不要在看到 Gold 后修改梯度再把修改结果称为无监督正式验证。
